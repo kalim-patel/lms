@@ -37,7 +37,7 @@ pipeline {
 
                 sh 'sudo unzip -o lms.zip -d /tmp/lms'
 
-                sh 'sudo cp -r /tmp/lms/webapp/dist/* /var/www/html/'
+                sh 'sudo cp -r /tmp/lms/dist/* /var/www/html/'
             }
         }
         stage('Clean Up Workspace') {

@@ -27,5 +27,24 @@ pipeline {
                 sh 'cd webapp && curl -v -u $NEXUS_CRED_USR:$NEXUS_CRED_PSW --upload-file dist-${BUILD_NUMBER}.zip http://13.50.224.173:8081/repository/lms/'
             }
         }
+        stage('Deploy LMS') {
+            steps {
+                echo 'Deploying LMS'
+
+                sh 'curl -v -u $NEXUS_CRED_USR:$NEXUS_CRED_PSW -o lms.zip http://13.50.224.173:8081/repository/lms/dist-${BUILD_NUMBER}.zip'
+
+                sh 'sudo rm -rf /var/www/html/*'
+
+                sh 'sudo unzip -o lms.zip -d /tmp/lms'
+
+                sh 'sudo cp -r /tmp/lms/webapp/dist/* /var/www/html/'
+            }
+        }
+        stage('Clean Up Workspace') {
+            steps {
+                echo 'Cleaning Work Space'
+                cleanWs()
+            }
+        }
     }
 }
